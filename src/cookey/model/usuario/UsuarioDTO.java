@@ -1,4 +1,4 @@
-package model;
+package cookey.model.usuario;
 
 public class UsuarioDTO {
 	private String NombreUsuario;
