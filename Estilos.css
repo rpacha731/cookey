@@ -1,0 +1,47 @@
+.divcabe {
+    border-top: thin solid plum;
+    border-bottom: thin solid plum;
+    background-color: #F4ECF7;
+    text-align: center;
+}
+.tit {
+    font-size: xx-large;
+    font-weight: bold;
+}
+.borde {
+    border-right: 1px solid plum;
+    border-bottom: 1px solid plum;
+}
+.bordes {
+    border: 1px solid plum;
+}
+.msj2 {
+    column-span: 3;
+}
+.inp {
+    border: 2px solid plum;
+}
+input {
+    border: none;
+    text-align: center;
+}
+td {
+    padding: 2px;
+}
+.button {
+    color: white;
+    border: none;
+    background-color: plum;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 5px;
+    width: 140px;
+}
+.button2 {
+    color: #5B2C6F;
+    font-weight: bold;
+    border: none;
+    background-color: white;
+    text-align: center;
+}
