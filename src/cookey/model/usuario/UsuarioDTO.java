@@ -1,56 +1,56 @@
 package cookey.model.usuario;
 
 public class UsuarioDTO {
-	private String NombreUsuario;
-	private String Contrasena;
-	private String Avatar;
-	private int CantRecetas;
-	private float PromCalif;
+	private String nombreUsuario;
+	private String contrasena;
+	private String avatar;
+	private int cantRecetas;
+	private float promCalif;
 
 	public String getNombreUsuario() {
-		return NombreUsuario;
+		return nombreUsuario;
 	}
 
 	public void setNombreUsuario(String nombreUsuario) {
-		NombreUsuario = nombreUsuario;
+		this.nombreUsuario = nombreUsuario;
 	}
 
 	public String getContraseña() {
-		return Contrasena;
+		return contrasena;
 	}
 
-	public void setContraseña(String contraseña) {
-		Contrasena = contraseña;
+	public void setContraseña(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public String getAvatar() {
-		return Avatar;
+		return avatar;
 	}
 
 	public void setAvatar(String avatar) {
-		Avatar = avatar;
+		this.avatar = avatar;
 	}
 
 	public int getCantRecetas() {
-		return CantRecetas;
+		return cantRecetas;
 	}
 
 	public void setCantRecetas(int cantRecetas) {
-		CantRecetas = cantRecetas;
+		this.cantRecetas = cantRecetas;
 	}
 
 	public float getPromCalif() {
-		return PromCalif;
+		return promCalif;
 	}
 
 	public void setPromCalif(float promCalif) {
-		PromCalif = promCalif;
+		this.promCalif = promCalif;
 	}
 
 	@Override
 	public String toString() {
-		return "UsuarioDTO [NombreUsuario=" + NombreUsuario + ", Contraseña=" + Contrasena + ", Avatar=" + Avatar
-				+ ", CantRecetas=" + CantRecetas + ", PromCalif=" + PromCalif + "]";
+		return "UsuarioDTO [NombreUsuario=" + nombreUsuario + ", Contraseña=" + contrasena + ", Avatar=" + avatar
+				+ ", CantRecetas=" + cantRecetas + ", PromCalif=" + promCalif + "]";
 	}
 
 }

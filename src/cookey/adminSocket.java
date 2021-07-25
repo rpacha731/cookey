@@ -3,7 +3,7 @@ package cookey;
 
 import com.google.gson.Gson;
 
-import cookey.dao.SocioDAO;
+import cookey.dao.UsuarioDAO;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -96,7 +96,7 @@ public class adminSocket extends Thread {
 					if (hacer.contains("Ingresar")) {
 
 						UsuarioDTO user = new UsuarioDTO();
-						SocioDAO userD = new SocioDAO();
+						UsuarioDAO userD = new UsuarioDAO();
 						ArrayList<Atributo> atr = req.getAtributos();
 						String criterio1 = null;
 						String criterio2 = null;
@@ -122,7 +122,7 @@ public class adminSocket extends Thread {
 					} else if (hacer.contains("RegistrarU")) {
 
 						UsuarioDTO user = new UsuarioDTO();
-						SocioDAO userD = new SocioDAO();
+						UsuarioDAO userD = new UsuarioDAO();
 						ArrayList<Atributo> atr = req.getAtributos();
 
 						for (int i = 0; i < atr.size(); i++) {
