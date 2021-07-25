@@ -1,4 +1,4 @@
-package model;
+package cookey.model;
 
 public class Atributo {
 	private String atrib;

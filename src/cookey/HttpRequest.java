@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import model.Atributo;
+import cookey.model.Atributo;
 
 public class HttpRequest {
 	InputStream flujoentrada;

@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import model.Atributo;
-import model.UsuarioDTO;
+import cookey.model.Atributo;
+import cookey.model.usuario.UsuarioDTO;
 
 public class adminSocket extends Thread {
 	private final Socket conector;
