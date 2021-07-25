@@ -3,6 +3,7 @@ package cookey;
 
 import com.google.gson.Gson;
 
+import cookey.dao.RecetaDAO;
 import cookey.dao.UsuarioDAO;
 
 import java.io.BufferedOutputStream;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import cookey.model.Atributo;
+import cookey.model.receta.RecetaDTO;
 import cookey.model.usuario.UsuarioDTO;
 
 public class adminSocket extends Thread {
@@ -66,6 +68,8 @@ public class adminSocket extends Thread {
 				// Leeo todo el pedido HTTP hasta el final
 				httpPedido += buffer.readLine() + NEW_LINE;
 			}
+			
+			System.out.println("antes ***********************************");
 
 			System.out.println(httpPedido);
 
@@ -87,15 +91,40 @@ public class adminSocket extends Thread {
 			String PaginaInicio;
 			System.out.println("Accion: " + req.getAccion2());
 			System.out.println("Metodo: " + req.getMetodo());
+			
+			
 
 			if (req.getMetodo().contains("GET")) {
 
 				if (req.getAccion2() != null) {
 					String hacer = req.getAccion2();
+					
+					System.out.println("despues");
 
 					if (hacer.contains("Ingresar")) {
 
-						UsuarioDTO user = new UsuarioDTO();
+						System.out.println("entre ---------------------------------");
+
+						RecetaDTO receta = new RecetaDTO();
+						RecetaDAO recetaD = new RecetaDAO();
+						List<RecetaDTO> listadoRecetas = recetaD.readAllR();
+						Gson gson = new Gson();
+						String listadoJSON = "[";
+
+						for (int i = 0; i < listadoRecetas.size(); i++) {
+							receta = (RecetaDTO) listadoRecetas.get(i);
+							listadoJSON += gson.toJson(receta) + ",";
+						}
+
+						listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); // Le quito la ultima coma
+						listadoJSON += "]";
+
+						System.out.println((gson.toJson((RecetaDTO) receta)));
+
+						resp.imprimirSalida(resp.getHeader());
+						resp.imprimirSalida(listadoJSON);
+
+						/*UsuarioDTO user = new UsuarioDTO();
 						UsuarioDAO userD = new UsuarioDAO();
 						ArrayList<Atributo> atr = req.getAtributos();
 						String criterio1 = null;
@@ -117,7 +146,7 @@ public class adminSocket extends Thread {
 
 						listadoJSON += gson.toJson(user) + "]";
 						resp.imprimirSalida(resp.getHeader());
-						resp.imprimirSalida(listadoJSON);
+						resp.imprimirSalida(listadoJSON);*/
 
 					} else if (hacer.contains("RegistrarU")) {
 
@@ -133,21 +162,43 @@ public class adminSocket extends Thread {
 								user.setContraseña(atr.get(i).getValor());
 							}
 						}
-						
+
 						if (userD.createU(user)) {
 							System.out.println("Cree el usuario correctamente");
-							
+
 							Gson gson = new Gson();
 							String listadoJSON = "[";
 							listadoJSON += gson.toJson(user) + "]";
-							
+
 							resp.imprimirSalida(resp.getHeader());
 							resp.imprimirSalida(listadoJSON);
-							
+
 						} else {
 							System.out.println("No se pudo crear");
 						}
 
+					} else if (hacer.contains("ListarRecetas")) {
+
+						System.out.println("entre ---------------------------------");
+
+						RecetaDTO receta = new RecetaDTO();
+						RecetaDAO recetaD = new RecetaDAO();
+						List<RecetaDTO> listadoRecetas = recetaD.readAllR();
+						Gson gson = new Gson();
+						String listadoJSON = "[";
+
+						for (int i = 0; i < listadoRecetas.size(); i++) {
+							receta = (RecetaDTO) listadoRecetas.get(i);
+							listadoJSON += gson.toJson(receta) + ",";
+						}
+
+						listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); // Le quito la ultima coma
+						listadoJSON += "]";
+
+						System.out.println((gson.toJson((RecetaDTO) receta)));
+
+						resp.imprimirSalida(resp.getHeader());
+						resp.imprimirSalida(listadoJSON);
 					}
 
 				} else { // no piden ninguna accion enviamos un archivo, por defecto es index.html

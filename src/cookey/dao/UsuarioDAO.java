@@ -115,11 +115,11 @@ public class UsuarioDAO implements IUsuarioDAO<UsuarioDTO> {
 			int control = 0;
 			PreparedStatement ps = con.getCnn().prepareCall(SQL_UPDATE);
 
-			ps.setInt(1, e.getDias());
+			/*ps.setInt(1, e.getDias());
 			ps.setInt(2, e.getCosto());
 			ps.setInt(3, e.getTotal());
 			ps.setString(4, e.getDNI());
-			ps.setString(5, e.getActividad());
+			ps.setString(5, e.getActividad());*/
 
 			control = ps.executeUpdate();
 			if (control > 0) {
@@ -148,14 +148,14 @@ public class UsuarioDAO implements IUsuarioDAO<UsuarioDTO> {
 
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				socio = new UsuarioDTO();
+				/*socio = new UsuarioDTO();
 				socio.setDNI(rs.getString("DNI"));
 				socio.setApellido(rs.getString("Apellido"));
 				socio.setActividad(rs.getString("Actividad"));
 				socio.setDias(rs.getInt("Dias"));
 				socio.setCosto(rs.getInt("Costo"));
 				socio.setTotal(rs.getInt("Total"));
-				lista.add(socio);
+				lista.add(socio);*/
 			}
 
 		} catch (SQLException e1) {
