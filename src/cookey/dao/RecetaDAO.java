@@ -20,10 +20,9 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 	public static final String SQL_INSERT = "INSERT INTO socios (DNI, Apellido, Actividad, Dias, Costo, Total) VALUES (?, ?, ?, ?, ?, ?)";
 	public static final String SQL_DELETE = "DELETE FROM socios WHERE DNI = ? AND Actividad = ?";
 	public static final String SQL_UPDATE = "UPDATE socios SET Dias = ?, Costo = ?, Total = ? WHERE DNI = ? AND Actividad = ?";
-	public static final String SQL_READ = "SELECT * FROM socios WHERE DNI LIKE ? OR Apellido LIKE ?";
-	public static final String SQL_READ_SEARCH = "SELECT titulo, descripcion, ingredientes, pasos, duracion, dificultad, imagen, comentarios, megustas, calificacion, fecha_publi, usuario_creador, nombre_categoria FROM receta r INNER JOIN categoria c ON r.idcategoria = c.idcategoria WHERE titulo LIKE ?";
-	public static final String SQL_READALL_RECIPES = "SELECT titulo, descripcion, ingredientes, pasos, duracion, dificultad, imagen, comentarios, megustas, calificacion, fecha_publi, usuario_creador, nombre_categoria FROM receta r INNER JOIN categoria c ON r.idcategoria = c.idcategoria";
-	public static final String SQL_READALL_RECIPES_USER = "SELECT titulo, descripcion, ingredientes, pasos, duracion, dificultad, imagen, comentarios, megustas, calificacion, fecha_publi, usuario_creador, nombre_categoria FROM receta r INNER JOIN categoria c ON r.idcategoria = c.idcategoria WHERE usuario_creador = ?";
+	public static final String SQL_READ_SEARCH = "SELECT * FROM receta WHERE titulo LIKE ?";
+	public static final String SQL_READALL_RECIPES = "SELECT * FROM receta";
+	public static final String SQL_READALL_RECIPES_USER = "SELECT * FROM receta WHERE usuario_creador = ?";
 
 	@Override
 	public List<RecetaDTO> buscarR(String crite) {
@@ -52,7 +51,7 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 				receta.setCalificacion(rs.getFloat("calificacion"));
 				receta.setFechaPublicacion(rs.getDate("fecha_publi"));
 				receta.setUsuarioCreador(rs.getString("usuario_creador"));
-				receta.setCategoria(rs.getString("nombre_categoria"));
+				receta.setCategoria(rs.getString("categoria"));
 				
 				lista.add(receta);
 			}
@@ -94,7 +93,7 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 				receta.setCalificacion(rs.getFloat("calificacion"));
 				receta.setFechaPublicacion(rs.getDate("fecha_publi"));
 				receta.setUsuarioCreador(nomUsuario);
-				receta.setCategoria(rs.getString("nombre_categoria"));
+				receta.setCategoria(rs.getString("categoria"));
 				
 				lista.add(receta);
 			}
@@ -134,7 +133,7 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 				receta.setCalificacion(rs.getFloat("calificacion"));
 				receta.setFechaPublicacion(rs.getDate("fecha_publi"));
 				receta.setUsuarioCreador(rs.getString("usuario_creador"));
-				receta.setCategoria(rs.getString("nombre_categoria"));
+				receta.setCategoria(rs.getString("categoria"));
 
 				lista.add(receta);
 			}
