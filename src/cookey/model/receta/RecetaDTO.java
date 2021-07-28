@@ -1,16 +1,20 @@
 package cookey.model.receta;
 
-import java.sql.Time;
+import java.sql.Date;
 
 public class RecetaDTO {
 	private String titulo;
 	private String descripcion;
 	private String ingredientes; // Pasar a string el array de ingredientes
 	private String pasos;
-	private Time duracion;
+	private String duracion;
 	private String dificultad;
+	private String imagen;
 	private String categoria;
-	private String img;
+	private Integer megustas;
+	private Float calificacion;
+	private Date fechaPublicacion;
+	private String usuarioCreador;
 
 	public String getTitulo() {
 		return titulo;
@@ -44,11 +48,11 @@ public class RecetaDTO {
 		this.pasos = pasos;
 	}
 
-	public Time getDuracion() {
+	public String getDuracion() {
 		return duracion;
 	}
 
-	public void setDuracion(Time duracion) {
+	public void setDuracion(String duracion) {
 		this.duracion = duracion;
 	}
 
@@ -60,6 +64,14 @@ public class RecetaDTO {
 		this.dificultad = dificultad;
 	}
 
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+
 	public String getCategoria() {
 		return categoria;
 	}
@@ -68,19 +80,44 @@ public class RecetaDTO {
 		this.categoria = categoria;
 	}
 
-	public String getImg() {
-		return img;
+	public Integer getMegustas() {
+		return megustas;
 	}
 
-	public void setImg(String img) {
-		this.img = img;
+	public void setMegustas(Integer megustas) {
+		this.megustas = megustas;
+	}
+
+	public Float getCalificacion() {
+		return calificacion;
+	}
+
+	public void setCalificacion(Float calificacion) {
+		this.calificacion = calificacion;
+	}
+
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
+	}
+
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
+	}
+
+	public String getUsuarioCreador() {
+		return usuarioCreador;
+	}
+
+	public void setUsuarioCreador(String usuarioCreador) {
+		this.usuarioCreador = usuarioCreador;
 	}
 
 	@Override
 	public String toString() {
 		return "RecetaDTO [titulo=" + titulo + ", descripcion=" + descripcion + ", ingredientes=" + ingredientes
-				+ ", pasos=" + pasos + ", duracion=" + duracion + ", dificultad=" + dificultad + ", categoria="
-				+ categoria + ", img=" + img + "]";
+				+ ", pasos=" + pasos + ", duracion=" + duracion + ", dificultad=" + dificultad + ", imagen=" + imagen
+				+ ", categoria=" + categoria + ", megustas=" + megustas + ", calificacion=" + calificacion
+				+ ", fechaPublicacion=" + fechaPublicacion + ", usuarioCreador=" + usuarioCreador + "]";
 	}
 
 }

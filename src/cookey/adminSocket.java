@@ -68,8 +68,6 @@ public class adminSocket extends Thread {
 				// Leeo todo el pedido HTTP hasta el final
 				httpPedido += buffer.readLine() + NEW_LINE;
 			}
-			
-			System.out.println("antes ***********************************");
 
 			System.out.println(httpPedido);
 
@@ -91,40 +89,15 @@ public class adminSocket extends Thread {
 			String PaginaInicio;
 			System.out.println("Accion: " + req.getAccion2());
 			System.out.println("Metodo: " + req.getMetodo());
-			
-			
 
 			if (req.getMetodo().contains("GET")) {
 
 				if (req.getAccion2() != null) {
 					String hacer = req.getAccion2();
-					
-					System.out.println("despues");
 
 					if (hacer.contains("Ingresar")) {
 
-						System.out.println("entre ---------------------------------");
-
-						RecetaDTO receta = new RecetaDTO();
-						RecetaDAO recetaD = new RecetaDAO();
-						List<RecetaDTO> listadoRecetas = recetaD.readAllR();
-						Gson gson = new Gson();
-						String listadoJSON = "[";
-
-						for (int i = 0; i < listadoRecetas.size(); i++) {
-							receta = (RecetaDTO) listadoRecetas.get(i);
-							listadoJSON += gson.toJson(receta) + ",";
-						}
-
-						listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); // Le quito la ultima coma
-						listadoJSON += "]";
-
-						System.out.println((gson.toJson((RecetaDTO) receta)));
-
-						resp.imprimirSalida(resp.getHeader());
-						resp.imprimirSalida(listadoJSON);
-
-						/*UsuarioDTO user = new UsuarioDTO();
+						UsuarioDTO user = new UsuarioDTO();
 						UsuarioDAO userD = new UsuarioDAO();
 						ArrayList<Atributo> atr = req.getAtributos();
 						String criterio1 = null;
@@ -146,7 +119,30 @@ public class adminSocket extends Thread {
 
 						listadoJSON += gson.toJson(user) + "]";
 						resp.imprimirSalida(resp.getHeader());
-						resp.imprimirSalida(listadoJSON);*/
+						resp.imprimirSalida(listadoJSON);
+
+					} else if (hacer.contains("UsuarioReceta")) {
+
+						UsuarioDTO user = new UsuarioDTO();
+						UsuarioDAO userD = new UsuarioDAO();
+						ArrayList<Atributo> atr = req.getAtributos();
+						String criterio1 = null;
+						String criterio2 = null;
+
+						for (int i = 0; i < atr.size(); i++) {
+							if (atr.get(i).getAtrib().equals("user")) {
+								criterio1 = atr.get(i).getValor();
+							}
+						}
+
+						user = userD.readU(criterio1);
+
+						Gson gson = new Gson();
+						String listadoJSON = "[";
+
+						listadoJSON += gson.toJson(user) + "]";
+						resp.imprimirSalida(resp.getHeader());
+						resp.imprimirSalida(listadoJSON);
 
 					} else if (hacer.contains("RegistrarU")) {
 
@@ -177,13 +173,59 @@ public class adminSocket extends Thread {
 							System.out.println("No se pudo crear");
 						}
 
-					} else if (hacer.contains("ListarRecetas")) {
-
-						System.out.println("entre ---------------------------------");
+					} else if (hacer.contains("ListarRecetasUser")) {
 
 						RecetaDTO receta = new RecetaDTO();
 						RecetaDAO recetaD = new RecetaDAO();
-						List<RecetaDTO> listadoRecetas = recetaD.readAllR();
+						List<RecetaDTO> listadoRecetas;
+
+						ArrayList<Atributo> atr = req.getAtributos();
+						String nomUser = "";
+
+						for (int i = 0; i < atr.size(); i++)
+							if (atr.get(i).getAtrib().equals("user"))
+								nomUser = atr.get(i).getValor();
+
+						listadoRecetas = recetaD.readRecUser(nomUser);
+
+						Gson gson = new Gson();
+						String listadoJSON = "[";
+
+						if (listadoRecetas.size() == 0) {
+							listadoJSON += "null]";
+						} else {
+							for (int i = 0; i < listadoRecetas.size(); i++) {
+								receta = (RecetaDTO) listadoRecetas.get(i);
+								listadoJSON += gson.toJson(receta) + ",";
+							}
+
+							listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); // Le quito la ultima coma
+							listadoJSON += "]";
+
+							System.out.println((gson.toJson((RecetaDTO) receta)));
+						}
+
+						resp.imprimirSalida(resp.getHeader());
+						resp.imprimirSalida(listadoJSON);
+
+					} else if (hacer.contains("ListarRecetas")) {
+
+						RecetaDTO receta = new RecetaDTO();
+						RecetaDAO recetaD = new RecetaDAO();
+						List<RecetaDTO> listadoRecetas;
+
+						if (hacer.contains("ListarRecetasUser")) {
+							ArrayList<Atributo> atr = req.getAtributos();
+							String nomUser = "";
+
+							for (int i = 0; i < atr.size(); i++)
+								if (atr.get(i).getAtrib().equals("user"))
+									nomUser = atr.get(i).getValor();
+
+							listadoRecetas = recetaD.readRecUser(hacer);
+						} else
+							listadoRecetas = recetaD.readAllR();
+
 						Gson gson = new Gson();
 						String listadoJSON = "[";
 
@@ -199,6 +241,33 @@ public class adminSocket extends Thread {
 
 						resp.imprimirSalida(resp.getHeader());
 						resp.imprimirSalida(listadoJSON);
+
+					} else if (hacer.contains("BuscarR")) {
+
+						RecetaDTO receta = new RecetaDTO();
+						RecetaDAO recetaD = new RecetaDAO();
+						List<RecetaDTO> listadoRecetas;
+
+						ArrayList<Atributo> atr = req.getAtributos();
+
+						listadoRecetas = recetaD.buscarR(atr.get(0).getValor());
+
+						Gson gson = new Gson();
+						String listadoJSON = "[";
+
+						for (int i = 0; i < listadoRecetas.size(); i++) {
+							receta = (RecetaDTO) listadoRecetas.get(i);
+							listadoJSON += gson.toJson(receta) + ",";
+						}
+
+						listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); // Le quito la ultima coma
+						listadoJSON += "]";
+
+						System.out.println((gson.toJson((RecetaDTO) receta)));
+
+						resp.imprimirSalida(resp.getHeader());
+						resp.imprimirSalida(listadoJSON);
+
 					}
 
 				} else { // no piden ninguna accion enviamos un archivo, por defecto es index.html

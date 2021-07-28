@@ -10,6 +10,10 @@ public interface IRecetaDAO<EntidadDTO> {
 	public boolean updateR(EntidadDTO e);
 	
 	public EntidadDTO readR(String clave, String clave1);
+	
+	public List<EntidadDTO> readRecUser(String clave);
+	
+	public List<EntidadDTO> buscarR(String clave);
 
 	public List<EntidadDTO> readAllR();
 }

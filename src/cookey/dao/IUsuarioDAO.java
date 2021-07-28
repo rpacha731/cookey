@@ -10,6 +10,8 @@ public interface IUsuarioDAO<EntidadDTO> {
 	public boolean updateU(EntidadDTO e);
 	
 	public EntidadDTO readU(String clave, String clave1);
+	
+	public EntidadDTO readU(String clave);
 
 	public List<EntidadDTO> readAllU();
 }
