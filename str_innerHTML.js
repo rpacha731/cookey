@@ -42,7 +42,7 @@ div_usuario = '<div class="row">' +
     '<div class="card-header d-flex justify-content-between align-items-center"' +
     'style="padding-top: 0px; padding-bottom: 0px;">' +
     '<h5 class="card-title" style="margin-top: 8px;"> {{rec.titulo}} </h5>' +
-    '<a href="" class="btn btn-outline-warning btn-sm" style="margin-rigth: 10%;"> Editar </a>' +
+    '<a href="" class="btn btn-outline-warning btn-sm" style="margin-rigth: 10%;" ng-click="editarRec($index);"> Editar </a>' +
     '</div>' +
     '<div class="card-body">' +
     '<a href="" class="btn btn-outline-danger btn-sm" style="float: right;" ng-click="eliminarRec($index);"> Eliminar </a>' +
@@ -190,7 +190,6 @@ div_receta_act = '<div class="col-9">' +
     '<img ng-src="{{recetaActual.imagen}}" alt="No se puede mostrar la imagen" style="height: 190px; width: 270px;">' +
     '</div> <hr>' +
     '<h5> Calificación = {{recetaActual.calificacion}} </h5> <hr>' +
-    '<h5> Votar: </h5> <hr>' +
     '<h5> Duración: {{recetaActual.duracion}} </h5> <hr>' +
     '<h5> Categoría: {{recetaActual.categoria}} </h5> <hr>' +
     '<h5> Dificultad: {{recetaActual.dificultad}} </h5> <hr>' +
