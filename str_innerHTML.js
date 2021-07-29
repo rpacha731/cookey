@@ -29,7 +29,7 @@ div_usuario = '<div class="row">' +
     '<p> Ups... Parece que todavía no tienes ninguna receta :( </p>' +
     '<button class="btn btn-info btn-sm" ng-click="crearReceta();"> Agrega una! </button>' +
     '</div>' +
-    '<div ng-repeat="rec in recetasUsuarioLog" ng-if="recetasUsuarioLog[0] !== null">' +
+    '<div ng-repeat="rec in recetasUsuarioLog track by $index" ng-if="recetasUsuarioLog[0] !== null">' +
     '<div class="row d-flex justify-content-center" style="margin-top: 7px;">' +
     '<div class="col-7">' +
     '<div class="card mb-3" style="max-height: 150px;">' +
@@ -42,9 +42,10 @@ div_usuario = '<div class="row">' +
     '<div class="card-header d-flex justify-content-between align-items-center"' +
     'style="padding-top: 0px; padding-bottom: 0px;">' +
     '<h5 class="card-title" style="margin-top: 8px;"> {{rec.titulo}} </h5>' +
-    '<a href="" class="btn btn-outline-info btn-sm"> editar o borrar ?</a>' +
+    '<a href="" class="btn btn-outline-warning btn-sm" style="margin-rigth: 10%;"> Editar </a>' +
     '</div>' +
     '<div class="card-body">' +
+    '<a href="" class="btn btn-outline-danger btn-sm" style="float: right;" ng-click="eliminarRec($index);"> Eliminar </a>' +
     '<p class="card-text"> {{rec.descripcion}} </p>' +
     '<p class="card-text"><small class="text-muted"> Calificación ' +
     '{{rec.calificacion}} - {{rec.megustas}} Me' +
@@ -53,6 +54,9 @@ div_usuario = '<div class="row">' +
     '</div>' +
     '</div>' +
     '</div>' +
+    '</div>' +
+    '<div class="col-2">' +
+    '<button type="button" class="btn btn-outline-primary btn-sm" style="margin-top: 5px;" ng-click="crearReceta();">Crear receta</button>' +
     '</div>' +
     '</div>' +
     '</div>';
@@ -161,13 +165,17 @@ div_inicio = '<div class="row">' +
     '<a href="" class="btn btn-primary btn-sm" ng-click="verRecetaActual($index+3);"> Ver receta </a>' +
     '</div> </div> </div> </div> </div> </div>';
 
-div_receta_act = '<div class="col-9">' +
+div_receta_act = '<div class="col-9">' + 
     '<div class="row">' +
     '<div class="col" style="margin: 5px; text-align: center;">' +
     '<h1> {{recetaActual.titulo}} </h1> <hr>' +
     '</div> </div>' +
     '<div class="row">' +
     '<div class="col-6">' +
+    '<h4> Descripción </h4>' +
+    '<div style="border: solid; border-radius: 3px; border-width: 0.5px; border-color: rgba(0,0,0,.125); width: 100%; height:auto; padding:5px; padding-left:10px;">' +
+    '{{recetaActual.descripcion}}' +
+    '</div> <hr>' +
     '<h4> Ingredientes </h4>' +
     '<div class="list-group">' +
     '<label class="list-group-item" ng-repeat="ing in ingredientesActuales()">' +
@@ -179,11 +187,13 @@ div_receta_act = '<div class="col-9">' +
     '</div> </li> </ol> </div> </div>' +
     '<div class="col-6 text-center" style="padding-bottom: 10px;">' +
     '<div class="d-flex justify-content-center">' +
-    '<img ng-src="{{recetaActual.imagen}}" alt="No se puede mostrar la imagen" style="height: auto; width: auto;">' +
+    '<img ng-src="{{recetaActual.imagen}}" alt="No se puede mostrar la imagen" style="height: 190px; width: 270px;">' +
     '</div> <hr>' +
     '<h5> Calificación = {{recetaActual.calificacion}} </h5> <hr>' +
     '<h5> Votar: </h5> <hr>' +
     '<h5> Duración: {{recetaActual.duracion}} </h5> <hr>' +
+    '<h5> Categoría: {{recetaActual.categoria}} </h5> <hr>' +
+    '<h5> Dificultad: {{recetaActual.dificultad}} </h5> <hr>' +
     '<h5> Receta creada por: @{{recetaActual.usuarioCreador}} </h5>' +
     '</div> </div> </div>';
 
@@ -228,21 +238,21 @@ div_crear_receta = '<div class="col-9"> <form> <br> <div class="form-group row">
     '</div> <div class="col">' +
     '<label for="in_dificultad">Dificultad</label>' +
     '<select ng-model="in_dificultad" class="form-control">' +
-    '<option selected>Fácil</option>' +
+    '<option selected>Facil</option>' +
     '<option>Media</option>' +
     '<option>Difícil</option>' +
     '</select> </div> <div class="col">' +
     '<label for="in_categoria">Categoría</label>' +
     '<select ng-model="in_categoria" class="form-control">' +
-    '<option selected value="1">Postres</option>' +
-    '<option value="2">Desayuno</option>' +
-    '<option value="3">Almuerzo</option>' +
-    '<option value="4">Merienda</option>' +
-    '<option value="5">Cena</option>' +
-    '<option value="6">Salado</option>' +
-    '<option value="7">Batidos</option>' +
-    '<option value="8">Bebidas</option>' +
-    '<option value="9">Aperitivos</option>' +
+    '<option selected>Postres</option>' +
+    '<option>Desayuno</option>' +
+    '<option>Almuerzo</option>' +
+    '<option>Merienda</option>' +
+    '<option>Cena</option>' +
+    '<option>Salado</option>' +
+    '<option>Batidos</option>' +
+    '<option>Bebidas</option>' +
+    '<option>Aperitivos</option>' +
     '</select> </div> </div> <br> <div class="row">' +
     '<div class="col d-flex justify-content-center">' +
     '<button type="button" class="btn btn-success btn-lg" ng-click="enviar();">Publicar</button>' +

@@ -5,6 +5,7 @@ app.controller("controlador", function ($scope, $http, $compile) {
     $scope.recetaActual = {};
     $scope.usuarioLogueado = {};
     $scope.recetasUsuarioLog = [];
+    $scope.recetaCreada = {};
     $scope.nameUser = '';
     $scope.head_modal = 'Loguearse en Cookey';
     $scope.btn_modal = 'Ingresar';
@@ -124,29 +125,74 @@ app.controller("controlador", function ($scope, $http, $compile) {
         titulo = $scope.in_titulo;
         descripcion = $scope.in_descripcion; //Ver cómo Java recibe la descripción cuando sea undefined (nula)
         ingredientes = $scope.Ingredientes;
-        pasos = $scope.pasos;
+        pasos = $scope.Pasos;
         duracion = $scope.in_duracion;
         dificultad = $scope.in_dificultad;
         categoria = $scope.in_categoria;
         img = $scope.objectURL2;
-        usuarioRec = $scope.usuarioLogueado.nombreUsuario;
+        usuarioCrea = $scope.usuarioLogueado.nombreUsuario;
 
         // Elementos de una receta: TITULO - DESCRIPCION (O) - 
         // INGREDIENTES - PASOS - DURACION - DIFICULTAD - CATEGORIA
         // IMAGEN - COMENTARIOS? - MEGUSTAS - CALIFICACION
         // FECHA PUBLICACION - USUARIO CREADOR
 
-        str_http = "http://localhost:8866/RegistrarR/?user=" + $scope.user_inic + "&passw=" +
-            $scope.passw_inic;
-
-        receta = { titulo, descripcion, ingredientes, pasos, duracion, dificultad, categoria, img }; //Esto se envía al server
+        str_http = "http://localhost:8866/RegistrarR/?titulo=" + titulo + "&descripcion=" + descripcion + "&ingredientes=" + ingredientes +
+            "&pasos=" + pasos + "&duracion=" + duracion + "&categoria=" + categoria + "&imagen=" + img +
+            "&usuarioCrea=" + $scope.usuarioLogueado.nombreUsuario + "&dificultad=" + dificultad;
 
         console.log("Título: " + $scope.in_titulo + ". Descripción: " + $scope.in_descripcion + ". Ingredientes: " + $scope.Ingredientes + ". Pasos: " + $scope.Pasos +
             ". Duración: " + $scope.in_duracion + ". Dificultad: " + $scope.in_dificultad + ". Categoría: " + $scope.in_categoria + ". Imagen: " +
             $scope.objectURL2);
+
+        $http.get(str_http).success(response => {
+            $scope.recetaCreada = response[0]; console.log(response);
+        });
+
+        setTimeout(function () {
+
+            if ($scope.recetaCreada !== null) {
+                alert("Receta creada con exito!");
+                $scope.listado();
+                $scope.loadRecUser();
+                $scope.perfil();
+                $scope.clearCrear();
+            }
+        }, 1500);
+
+        console.log($scope.recetaCreada);
     }
 
     // Fin
+
+    $scope.clearCrear = function () {
+        $scope.Ingredientes = [];
+        $scope.Pasos = [];
+        $scope.objectURL;
+        $scope.inputs = [];
+        $scope.inputs2 = [];
+
+        $scope.in_titulo = "";
+        $scope.in_descripcion = "";
+        $scope.in_duracion = "";
+        $scope.in_dificultad = "";
+        $scope.in_categoria = "";
+        $scope.objectURL2 = "";
+    }
+
+    $scope.eliminarRec = function (ind) {
+        cond = confirm("Esta seguro de eliminar la receta " + $scope.recetasUsuarioLog[ind].titulo + " ?");
+        if (cond === true) {
+            str_http = "http://localhost:8866/EliminarReceta/?titulo=" + $scope.recetasUsuarioLog[ind].titulo + 
+                "&usuarioCrea=" + $scope.recetasUsuarioLog[ind].usuarioCreador;
+            $http.get(str_http)
+                .success(response => {
+                    $scope.recetasUsuarioLog = response; console.log(response);
+                });
+            $scope.listado();
+            $scope.perfil();
+        } 
+    }
 
     $scope.inicio = function () {
         if (localStorage.getItem("usuarioLogueado")) {
@@ -361,7 +407,7 @@ app.controller("controlador", function ($scope, $http, $compile) {
 
     $scope.crearReceta = function () {
         document.getElementById("contenidoCambio").innerHTML = div_crear_receta;
-        $scope.compilar_element("contenidoCambio");    
+        $scope.compilar_element("contenidoCambio");
     }
 
     $scope.buscar = function () {
@@ -370,13 +416,13 @@ app.controller("controlador", function ($scope, $http, $compile) {
         } else {
             $http.get("http://localhost:8866/BuscarR/?criterio=" + $scope.busq)
                 .success(response => {
-                $scope.Recetas = response; console.log(response);
+                    $scope.Recetas = response; console.log(response);
 
-                if ($scope.user_response[0] === null) {
-                    $scope.Recetas = [];
-                }
-            });
-            
+                    if ($scope.user_response[0] === null) {
+                        $scope.Recetas = [];
+                    }
+                });
+
         }
     }
 

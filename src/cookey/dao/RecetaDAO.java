@@ -3,7 +3,6 @@ package cookey.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,10 +14,8 @@ import util.Conexion;
 public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 
 	public static final Conexion con = Conexion.crearConexion();
-	public static final String SQL_READ_USER = "SELECT * FROM usuarios WHERE nombre_usuario = ? AND contrasena = ?";
-	public static final String SQL_INSERT_USER = "INSERT INTO usuarios (nombre_usuario, contrasena, avatar, cant_recetas, prom_calif) VALUES (?, ?, ?, ?, ?)";
-	public static final String SQL_INSERT = "INSERT INTO socios (DNI, Apellido, Actividad, Dias, Costo, Total) VALUES (?, ?, ?, ?, ?, ?)";
-	public static final String SQL_DELETE = "DELETE FROM socios WHERE DNI = ? AND Actividad = ?";
+	public static final String SQL_INSERT_RECIPE = "INSERT INTO receta (titulo, descripcion, ingredientes, pasos, duracion, dificultad, imagen, fecha_publi, categoria, usuario_creador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public static final String SQL_DELETE_RECIPE = "DELETE FROM receta WHERE titulo = ? AND usuario_creador = ?";
 	public static final String SQL_UPDATE = "UPDATE socios SET Dias = ?, Costo = ?, Total = ? WHERE DNI = ? AND Actividad = ?";
 	public static final String SQL_READ_SEARCH = "SELECT * FROM receta WHERE titulo LIKE ?";
 	public static final String SQL_READALL_RECIPES = "SELECT * FROM receta";
@@ -148,55 +145,23 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 	}
 
 	@Override
-	public RecetaDTO readR(String nomUser, String passw) {
-
-		RecetaDTO user = null;
-
-		try {
-
-			ResultSet rs = null;
-			PreparedStatement ps = con.getCnn().prepareCall(SQL_READ_USER);
-
-			ps.setString(1, nomUser);
-			ps.setString(2, passw);
-
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				/*
-				 * user = new UsuarioDTO();
-				 * user.setNombreUsuario(rs.getString("nombre_usuario"));
-				 * user.setContraseña(rs.getString("contrasena"));
-				 * user.setAvatar(rs.getString("avatar"));
-				 * user.setCantRecetas(rs.getInt("cant_recetas"));
-				 * user.setPromCalif(rs.getFloat("prom_calif"));
-				 */
-			}
-
-			return user;
-
-		} catch (SQLException e1) {
-			Logger.getLogger(RecetaDAO.class.getName()).log(Level.SEVERE, null, e1);
-		} finally {
-			con.cerrarConexion();
-		}
-
-		return user;
-	}
-
-	@SuppressWarnings("null")
-	@Override
-	public boolean createR(RecetaDTO u) {
+	public boolean createR(RecetaDTO rece) {
 
 		try {
 			int control = 0;
-			PreparedStatement ps = con.getCnn().prepareCall(SQL_INSERT_USER);
-			/*
-			 * ps.setString(1, u.getNombreUsuario()); ps.setString(2, u.getContraseña());
-			 */
-			ps.setNull(3, 0);
-			ps.setNull(4, 0);
-			ps.setNull(5, 0);
+			PreparedStatement ps = con.getCnn().prepareCall(SQL_INSERT_RECIPE);
+
+			ps.setString(1, rece.getTitulo());
+			ps.setString(2, rece.getDescripcion());
+			ps.setString(3, rece.getIngredientes());
+			ps.setString(4, rece.getPasos());
+			ps.setString(5, rece.getDuracion());
+			ps.setString(6, rece.getDificultad());
+			ps.setString(7, rece.getImagen());
+			ps.setDate(8, rece.getFechaPublicacion());
+			ps.setString(9, rece.getCategoria());
+			ps.setString(10, rece.getUsuarioCreador());
+
 
 			control = ps.executeUpdate();
 			if (control > 0) {
@@ -214,13 +179,13 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 	// SIN IMPLEMENTAR
 
 	@Override
-	public boolean deleteR(Object DNI, Object Actividad) {
+	public boolean deleteR(String tit, String userCrea) {
 
 		try {
 			int control = 0;
-			PreparedStatement ps = con.getCnn().prepareCall(SQL_DELETE);
-			ps.setString(1, (String) DNI);
-			ps.setString(2, (String) Actividad);
+			PreparedStatement ps = con.getCnn().prepareCall(SQL_DELETE_RECIPE);
+			ps.setString(1, tit);
+			ps.setString(2, userCrea);
 
 			control = ps.executeUpdate();
 			if (control > 0) {
