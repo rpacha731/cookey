@@ -12,6 +12,8 @@ app.controller("controlador", function ($scope, $http, $compile) {
     $scope.inic_o_crear = 0;
     $scope.editar = 0;
     $scope.tituloAnt;
+    $scope.avatarNuevo;
+    $scope.resource;
 
     $scope.ingredientesActuales = function () {
         return $scope.recetaActual.ingredientes.split(",");
@@ -19,6 +21,15 @@ app.controller("controlador", function ($scope, $http, $compile) {
 
     $scope.pasosActuales = function () {
         return $scope.recetaActual.pasos.split(",");
+    }
+
+    $scope.fileSelected_2 = function (element) {
+        var myFileSelected = element.files[0];
+        console.log(myFileSelected);
+        $scope.avatarNuevo = element.files[0].name;
+        console.log($scope.avatarNuevo);
+        $scope.resource = URL.createObjectURL(myFileSelected);
+        document.getElementById("img2").src = $scope.resource;
     }
 
     // Parte registrar receta
@@ -379,7 +390,7 @@ app.controller("controlador", function ($scope, $http, $compile) {
             if (i1 && i2 && i3) {
 
                 str_http = "http://localhost:8866/RegistrarU/?newUserName=" + $scope.newuser + "&newPassw=" +
-                    $scope.passw2;
+                    $scope.passw2 + "&avatar=" + $scope.avatarNuevo;
 
                 $http.get(str_http).success(response => {
                     $scope.user_response = response; console.log(response);

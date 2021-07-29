@@ -1,15 +1,12 @@
 div_usuario = '<div class="row">' +
     '<div class="d-flex align-items-start">' +
     '<div class="flex-shrink-0">' +
-    '<img ng-src="{{usuarioLogueado.avatar}}" alt="" height="100" width="100"' +
+    '<img ng-src="{{usuarioLogueado.avatarImg}}" alt="" height="100" width="100"' +
     'style="border-radius: 50%;">' +
     '</div>' +
     '<div class="flex-grow-1 ms-3" style="padding: 10px;">' +
     '<h3 ng-bind="nameUser"> </h3>' +
     '@<span ng-bind="nameUser"> </span>' +
-    '</div>' +
-    '<div class="justify-content-end" style="padding: 5px;">' +
-    '<img src="edit.png" alt="" height="30" width="30"> Editar perfil' +
     '</div>' +
     '</div>' +
     '</div>' +
@@ -65,6 +62,12 @@ str_crear_cuenta = '<input type="text" placeholder="Nombre de usuario" ng-model=
     '<input type="password" placeholder="Contraseña" ng-model="passw1"> <hr>' +
     '<input type="password" placeholder="Confirma contraseña" ng-model="passw2"> <hr>' +
     '<div style="text-align: center;">' +
+    '<div class="image-upload">' +
+    '<label for="in_file2"> <span> Sube un avatar! </span> <br>' +
+    '<img src="imagen.png" alt="Click en el botón" style="margin-left: 17%; margin-top: 5px;"' +
+    'ng-model="img2" id="img2"> </label>' +
+    '<input type="file" class="form-control-file" ng-model="in_file2" id="in_file2"' +
+    'onchange="angular.element(this).scope().fileSelected_2(this)"> </div>' +
     '<span style="font-size: 12px;"> Tenés cuenta? <a href=""' +
     'ng-click="cambiar_cont_modal(0);"> Inicia sesión! </a> </span>' +
     '</div> <div id="msj_modal" style="display: none;"> </div>';
@@ -119,7 +122,7 @@ div_inicio = '<div class="row">' +
     '<tr> <td> <input type="text" ng-model="busq" ng-keyup="buscar();"> </td> </tr>' +
     '<tr> <td> <hr> </td> </tr>' +
     '<tr> <td> Ordenar por: </td> </tr>' +
-    '<tr> <td> <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">' +
+    '<tr> <td>  <input class="form-check-input" type="checkbox" id="flexCheckDefault" ng-model="ordCalif" ng-change="ordenar();">' +
     '<label class="form-check-label" for="flexCheckDefault"> Calificación </label> </td> </tr> </table> </div>' +
     '<div class="col-9" id="grillaRecetas">' +
     '<div class="row" ng-repeat="rece in Recetas track by $index" ng-if="$index % 4 === 0"' +
@@ -239,7 +242,7 @@ div_crear_receta = '<div class="col-9"> <form> <br> <div class="form-group row">
     '<select ng-model="in_dificultad" class="form-control">' +
     '<option selected>Facil</option>' +
     '<option>Media</option>' +
-    '<option>Difícil</option>' +
+    '<option>Dificil</option>' +
     '</select> </div> <div class="col">' +
     '<label for="in_categoria">Categoría</label>' +
     '<select ng-model="in_categoria" class="form-control">' +
