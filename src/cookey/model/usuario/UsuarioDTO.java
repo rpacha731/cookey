@@ -3,7 +3,7 @@ package cookey.model.usuario;
 public class UsuarioDTO {
 	private String nombreUsuario;
 	private String contrasena;
-	private String avatar;
+	private String avatarImg;
 	private int cantRecetas;
 	private float promCalif;
 
@@ -24,11 +24,11 @@ public class UsuarioDTO {
 	}
 
 	public String getAvatar() {
-		return avatar;
+		return avatarImg;
 	}
 
 	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+		this.avatarImg = avatar;
 	}
 
 	public int getCantRecetas() {
@@ -49,7 +49,7 @@ public class UsuarioDTO {
 
 	@Override
 	public String toString() {
-		return "UsuarioDTO [NombreUsuario=" + nombreUsuario + ", Contraseña=" + contrasena + ", Avatar=" + avatar
+		return "UsuarioDTO [NombreUsuario=" + nombreUsuario + ", Contraseña=" + contrasena + ", Avatar=" + avatarImg
 				+ ", CantRecetas=" + cantRecetas + ", PromCalif=" + promCalif + "]";
 	}
 

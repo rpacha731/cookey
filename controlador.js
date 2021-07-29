@@ -10,6 +10,10 @@ app.controller("controlador", function ($scope, $http, $compile) {
     $scope.head_modal = 'Loguearse en Cookey';
     $scope.btn_modal = 'Ingresar';
     $scope.inic_o_crear = 0;
+    $scope.editar = 0;
+    $scope.tituloAnt;
+    $scope.avatarNuevo;
+    $scope.resource;
 
     $scope.ingredientesActuales = function () {
         return $scope.recetaActual.ingredientes.split(",");
@@ -17,6 +21,15 @@ app.controller("controlador", function ($scope, $http, $compile) {
 
     $scope.pasosActuales = function () {
         return $scope.recetaActual.pasos.split(",");
+    }
+
+    $scope.fileSelected_2 = function (element) {
+        var myFileSelected = element.files[0];
+        console.log(myFileSelected);
+        $scope.avatarNuevo = element.files[0].name;
+        console.log($scope.avatarNuevo);
+        $scope.resource = URL.createObjectURL(myFileSelected);
+        document.getElementById("img2").src = $scope.resource;
     }
 
     // Parte registrar receta
@@ -137,9 +150,16 @@ app.controller("controlador", function ($scope, $http, $compile) {
         // IMAGEN - COMENTARIOS? - MEGUSTAS - CALIFICACION
         // FECHA PUBLICACION - USUARIO CREADOR
 
-        str_http = "http://localhost:8866/RegistrarR/?titulo=" + titulo + "&descripcion=" + descripcion + "&ingredientes=" + ingredientes +
+        if ($scope.editar === 0) {
+            str_http = "http://localhost:8866/RegistrarR/?titulo=" + titulo + "&descripcion=" + descripcion + "&ingredientes=" + ingredientes +
             "&pasos=" + pasos + "&duracion=" + duracion + "&categoria=" + categoria + "&imagen=" + img +
             "&usuarioCrea=" + $scope.usuarioLogueado.nombreUsuario + "&dificultad=" + dificultad;
+        } else if ($scope.editar === 1) {
+            str_http = "http://localhost:8866/ActualizarR/?titulo=" + titulo + "&descripcion=" + descripcion + "&ingredientes=" + ingredientes +
+            "&pasos=" + pasos + "&duracion=" + duracion + "&categoria=" + categoria + "&imagen=" + img + "&dificultad=" + dificultad + 
+            "&tituloAnt=" + $scope.tituloAnt + "&user=" + $scope.usuarioLogueado.nombreUsuario;
+            $scope.editar = 0;
+        }
 
         console.log("Título: " + $scope.in_titulo + ". Descripción: " + $scope.in_descripcion + ". Ingredientes: " + $scope.Ingredientes + ". Pasos: " + $scope.Pasos +
             ". Duración: " + $scope.in_duracion + ". Dificultad: " + $scope.in_dificultad + ". Categoría: " + $scope.in_categoria + ". Imagen: " +
@@ -152,7 +172,7 @@ app.controller("controlador", function ($scope, $http, $compile) {
         setTimeout(function () {
 
             if ($scope.recetaCreada !== null) {
-                alert("Receta creada con exito!");
+                alert("Receta creada/actualizada con exito!");
                 $scope.listado();
                 $scope.loadRecUser();
                 $scope.perfil();
@@ -169,8 +189,8 @@ app.controller("controlador", function ($scope, $http, $compile) {
         $scope.Ingredientes = [];
         $scope.Pasos = [];
         $scope.objectURL;
-        $scope.inputs = [];
-        $scope.inputs2 = [];
+        $scope.inputs = [0];
+        $scope.inputs2 = [0];
 
         $scope.in_titulo = "";
         $scope.in_descripcion = "";
@@ -178,6 +198,30 @@ app.controller("controlador", function ($scope, $http, $compile) {
         $scope.in_dificultad = "";
         $scope.in_categoria = "";
         $scope.objectURL2 = "";
+    }
+
+    $scope.editarRec = function (ind) {
+        $scope.crearReceta();
+
+        $scope.editar = 1;
+        $scope.tituloAnt = $scope.recetasUsuarioLog[ind].titulo;
+        $scope.Ingredientes = $scope.recetasUsuarioLog[ind].ingredientes.split(",");
+        $scope.Pasos = $scope.recetasUsuarioLog[ind].pasos.split(",");
+        document.getElementById("img").src = $scope.recetasUsuarioLog[ind].imagen;
+        for (var i = 0; i < $scope.Ingredientes.length - 1; i++) {
+            $scope.inputs.push(0);
+        }
+        for (var i = 0; i < $scope.Pasos.length - 1; i++) {
+            $scope.inputs2.push(0);
+        }
+
+        $scope.in_titulo = $scope.recetasUsuarioLog[ind].titulo;
+        $scope.in_descripcion = $scope.recetasUsuarioLog[ind].descripcion;
+        $scope.in_duracion = $scope.recetasUsuarioLog[ind].duracion;
+        $scope.in_dificultad = $scope.recetasUsuarioLog[ind].dificultad;
+        $scope.in_categoria = $scope.recetasUsuarioLog[ind].categoria;
+
+        
     }
 
     $scope.eliminarRec = function (ind) {
@@ -346,7 +390,7 @@ app.controller("controlador", function ($scope, $http, $compile) {
             if (i1 && i2 && i3) {
 
                 str_http = "http://localhost:8866/RegistrarU/?newUserName=" + $scope.newuser + "&newPassw=" +
-                    $scope.passw2;
+                    $scope.passw2 + "&avatar=" + $scope.avatarNuevo;
 
                 $http.get(str_http).success(response => {
                     $scope.user_response = response; console.log(response);
@@ -426,7 +470,15 @@ app.controller("controlador", function ($scope, $http, $compile) {
         }
     }
 
-
+    $scope.ordenar = function () {
+        if ($scope.ordCalif) {
+            $scope.Recetas.sort(function (a, b) {
+                if (a.calificacion < b.calificacion) return 1;
+                else if (a.calificacion > b.calificacion) return -1;
+                return 0;
+            });
+        }
+    }
 
 
 

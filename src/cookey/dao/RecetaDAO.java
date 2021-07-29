@@ -16,7 +16,7 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 	public static final Conexion con = Conexion.crearConexion();
 	public static final String SQL_INSERT_RECIPE = "INSERT INTO receta (titulo, descripcion, ingredientes, pasos, duracion, dificultad, imagen, fecha_publi, categoria, usuario_creador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	public static final String SQL_DELETE_RECIPE = "DELETE FROM receta WHERE titulo = ? AND usuario_creador = ?";
-	public static final String SQL_UPDATE = "UPDATE socios SET Dias = ?, Costo = ?, Total = ? WHERE DNI = ? AND Actividad = ?";
+	public static final String SQL_UPDATE_RECIPE = "UPDATE receta SET titulo = ?, descripcion = ?, ingredientes = ?, pasos = ?, duracion = ?, dificultad = ?, imagen = ?, fecha_publi = ?, categoria = ? WHERE titulo = ? AND usuario_creador = ?";
 	public static final String SQL_READ_SEARCH = "SELECT * FROM receta WHERE titulo LIKE ?";
 	public static final String SQL_READALL_RECIPES = "SELECT * FROM receta";
 	public static final String SQL_READALL_RECIPES_USER = "SELECT * FROM receta WHERE usuario_creador = ?";
@@ -201,17 +201,23 @@ public class RecetaDAO implements IRecetaDAO<RecetaDTO> {
 	}
 
 	@Override
-	public boolean updateR(RecetaDTO e) {
+	public boolean updateR(RecetaDTO rece, String tituloAnt) {
 
 		try {
 			int control = 0;
-			PreparedStatement ps = con.getCnn().prepareCall(SQL_UPDATE);
-
-			/*
-			 * ps.setInt(1, e.getDias()); ps.setInt(2, e.getCosto()); ps.setInt(3,
-			 * e.getTotal()); ps.setString(4, e.getDNI()); ps.setString(5,
-			 * e.getActividad());
-			 */
+			PreparedStatement ps = con.getCnn().prepareCall(SQL_UPDATE_RECIPE);
+			
+			ps.setString(1, rece.getTitulo());
+			ps.setString(2, rece.getDescripcion());
+			ps.setString(3, rece.getIngredientes());
+			ps.setString(4, rece.getPasos());
+			ps.setString(5, rece.getDuracion());
+			ps.setString(6, rece.getDificultad());
+			ps.setString(7, rece.getImagen());
+			ps.setDate(8, rece.getFechaPublicacion());
+			ps.setString(9, rece.getCategoria());
+			ps.setString(10, tituloAnt);
+			ps.setString(11, rece.getUsuarioCreador());
 
 			control = ps.executeUpdate();
 			if (control > 0) {

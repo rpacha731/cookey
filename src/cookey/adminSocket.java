@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.sql.Date;
 
 import cookey.model.Atributo;
 import cookey.model.receta.RecetaDTO;
@@ -123,29 +122,6 @@ public class adminSocket extends Thread {
 						resp.imprimirSalida(resp.getHeader());
 						resp.imprimirSalida(listadoJSON);
 
-					} else if (hacer.contains("UsuarioReceta")) {
-
-						UsuarioDTO user = new UsuarioDTO();
-						UsuarioDAO userD = new UsuarioDAO();
-						ArrayList<Atributo> atr = req.getAtributos();
-						String criterio1 = null;
-						String criterio2 = null;
-
-						for (int i = 0; i < atr.size(); i++) {
-							if (atr.get(i).getAtrib().equals("user")) {
-								criterio1 = atr.get(i).getValor();
-							}
-						}
-
-						user = userD.readU(criterio1);
-
-						Gson gson = new Gson();
-						String listadoJSON = "[";
-
-						listadoJSON += gson.toJson(user) + "]";
-						resp.imprimirSalida(resp.getHeader());
-						resp.imprimirSalida(listadoJSON);
-
 					} else if (hacer.contains("RegistrarU")) {
 
 						UsuarioDTO user = new UsuarioDTO();
@@ -158,6 +134,9 @@ public class adminSocket extends Thread {
 							}
 							if (atr.get(i).getAtrib().equals("newPassw")) {
 								user.setContraseña(atr.get(i).getValor());
+							}
+							if (atr.get(i).getAtrib().equals("avatar")) {
+								user.setAvatar(atr.get(i).getValor());
 							}
 						}
 
@@ -214,19 +193,7 @@ public class adminSocket extends Thread {
 
 						RecetaDTO receta = new RecetaDTO();
 						RecetaDAO recetaD = new RecetaDAO();
-						List<RecetaDTO> listadoRecetas;
-
-						if (hacer.contains("ListarRecetasUser")) {
-							ArrayList<Atributo> atr = req.getAtributos();
-							String nomUser = "";
-
-							for (int i = 0; i < atr.size(); i++)
-								if (atr.get(i).getAtrib().equals("user"))
-									nomUser = atr.get(i).getValor();
-
-							listadoRecetas = recetaD.readRecUser(hacer);
-						} else
-							listadoRecetas = recetaD.readAllR();
+						List<RecetaDTO> listadoRecetas = recetaD.readAllR();
 
 						Gson gson = new Gson();
 						String listadoJSON = "[";
@@ -324,6 +291,64 @@ public class adminSocket extends Thread {
 							System.out.println("No se pudo crear");
 						}
 
+					} else if (hacer.contains("ActualizarR")) {
+
+						RecetaDTO receta = new RecetaDTO();
+						RecetaDAO recetaD = new RecetaDAO();
+
+						ArrayList<Atributo> atr = req.getAtributos();
+						String tituloAnt = null;
+
+						for (int i = 0; i < atr.size(); i++) {
+							if (atr.get(i).getAtrib().equals("titulo")) {
+								receta.setTitulo(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("descripcion")) {
+								receta.setDescripcion(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("ingredientes")) {
+								receta.setIngredientes(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("pasos")) {
+								receta.setPasos(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("duracion")) {
+								receta.setDuracion(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("categoria")) {
+								receta.setCategoria(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("imagen")) {
+								receta.setImagen(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("user")) {
+								receta.setUsuarioCreador(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("dificultad")) {
+								receta.setDificultad(atr.get(i).getValor().replaceAll("%20", " "));
+							}
+							if (atr.get(i).getAtrib().equals("tituloAnt")) {
+								tituloAnt = (atr.get(i).getValor().replaceAll("%20", " "));
+							}
+
+						}
+
+						receta.setFechaPublicacion(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+
+						if (recetaD.updateR(receta, tituloAnt)) {
+							System.out.println("Actualice la receta correctamente");
+
+							Gson gson = new Gson();
+							String listadoJSON = "[";
+							listadoJSON += gson.toJson(receta) + "]";
+
+							resp.imprimirSalida(resp.getHeader());
+							resp.imprimirSalida(listadoJSON);
+
+						} else {
+							System.out.println("No se pudo actualizar");
+						}
+
 					} else if (hacer.contains("EliminarReceta")) {
 
 						RecetaDTO receta = new RecetaDTO();
@@ -355,7 +380,7 @@ public class adminSocket extends Thread {
 							}
 
 							if (listadoRecetas.size() != 0) {
-								listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1); 
+								listadoJSON = listadoJSON.substring(0, listadoJSON.length() - 1);
 								listadoJSON += "]";
 							} else {
 								listadoJSON += "null]";

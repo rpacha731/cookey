@@ -7,7 +7,7 @@ public interface IRecetaDAO<EntidadDTO> {
 
 	public boolean deleteR(String clave, String clave2);
 
-	public boolean updateR(EntidadDTO e);
+	public boolean updateR(EntidadDTO e, String tituloAnt);
 	
 	public List<EntidadDTO> readRecUser(String clave);
 	
